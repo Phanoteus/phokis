@@ -1,7 +1,5 @@
 # Phokis
 
-[![Software License][ico-license]](LICENSE)
-
 ## Overview
 Phokis is just the very basic beginnings of a backend PHP site structure based on PSR-15 middleware. It relies existentially on:
 
@@ -16,7 +14,7 @@ Some other libraries are very helpful, such as [monolog](https://github.com/Seld
 Such as it is. There's no Packagist package yet. This repo is it. If you want to take a look at Phokis or use it in a project, you can simply clone this repository:
 
 ```bash
-$ git clone git://github.com/Phanoteus/phokis.git
+$ git clone https://github.com/Phanoteus/phokis.git
 ```
 
 And take advantage of repositories in your `composer.json` file to integrate it in to your project:
