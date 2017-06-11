@@ -1,0 +1,25 @@
+{
+  "name": "phanoteus/phokis",
+  "description": "Phokis System, based on PSR-15, auryn, FastRoute, middleman, Diactoros, and the work of many others.",
+  "version": "0.5.0",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Phanoteus",
+      "email": "phanoteus@hotmail.com",
+      "homepage": "https://github.com/Phanoteus/",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "http-interop/http-factory": "^0.3",
+    "mindplay/middleman": "^2.0",
+    "monolog/monolog": "^1.20",
+    "nikic/fast-route": "^1.0",
+    "rdlowrey/auryn": "^1.4",
+    "zendframework/zend-diactoros": "^1.4"
+  },
+  "autoload": {
+    "psr-4": { "Phanoteus\\Phokis\\": "src/" }
+  }
+}
