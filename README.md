@@ -8,7 +8,7 @@ Phokis is just the very basic beginnings of a backend PHP site structure based o
 - The [middleman](https://github.com/mindplay-dk/middleman) middleware dispatcher
 - The [PSR-15](https://github.com/http-interop/http-middleware) work done by a bunch of folks
 
-Some other libraries are very helpful, such as [monolog](https://github.com/Seldaek/monolog) and Zend's [Diactoros HTTP PSR-7 message implementation](https://github.com/zendframework/zend-diactoros), which is based on work by [Matthew Weier O'Phinney's](https://mwop.net/) [phly/http](https://github.com/phly/http) implementation.
+Some other libraries are very helpful, such as [monolog](https://github.com/Seldaek/monolog) and Zend's [Diactoros HTTP PSR-7 message implementation](https://github.com/zendframework/zend-diactoros), which is based on work by [Matthew Weier O'Phinney](https://mwop.net/) on his [phly/http](https://github.com/phly/http) implementation.
 
 ## Installation
 Such as it is. There's no Packagist package yet. This repo is it. If you want to take a look at Phokis or use it in a project, you can simply clone this repository:
