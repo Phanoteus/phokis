@@ -1,6 +1,6 @@
 # Composer
 /vendor/
-composer.json
+composer.lock
 
 # Other
 .DS_Store
