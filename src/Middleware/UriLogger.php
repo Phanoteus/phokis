@@ -40,8 +40,12 @@ class UriLogger implements ServerMiddlewareInterface
 
         $address = $server['REMOTE_ADDR'];
         $address  = ($address === '::1' || $address === '127.0.0.1') ? 'localhost' : $address;
-        $proxy = $server['HTTP_X_FORWARDED_FOR'];
-        $proxy = (empty($proxy)) ? '' : " (or '" . $proxy . "')'";
+
+        $proxy = '';
+        if (isset($server['HTTP_X_FORWARDED_FOR'])) {
+            $proxy = $server['HTTP_X_FORWARDED_FOR'];
+        }
+        $proxy = (empty($proxy)) ? $proxy : " (or '" . $proxy . "')'";
 
         $info = "Client at address '{$address}'{$proxy} requested the following URI: {$uri}.";
         $this->logger->addInfo($info, []);
