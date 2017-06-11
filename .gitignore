@@ -1,0 +1,6 @@
+# Composer
+/vendor/
+composer.json
+
+# Other
+.DS_Store
