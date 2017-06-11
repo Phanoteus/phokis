@@ -17,7 +17,6 @@ use Psr\Http\Message\ResponseInterface;
 use Phanoteus\Phokis\Factories\Http\Diactoros\Factory;
 use Psr\Log\LoggerInterface;
 use Auryn\Injector;
-use ReflectionMethod;
 
 class RequestHandler implements ServerMiddlewareInterface
 {

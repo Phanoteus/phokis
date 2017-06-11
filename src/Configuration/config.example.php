@@ -53,7 +53,7 @@ $definitions = [
     //     [
     //         ':defaultAction' =>
     //             [
-    //                 'handler' => 'Tisa\Framework\Controllers\HomeController::browse',
+    //                 'handler' => 'Controllers\HomeController::browse',
     //                 'parameters' => []
     //             ]
     //     ]
@@ -85,11 +85,11 @@ $prepares = [
     //                 'action' => [
     //                     'handler' => 'Controllers\HomeController::browse',
     //                     // OR:
-    //                     // 'route_handler' => [Tisa\Framework\Controllers\HomeController::class, 'browse']
+    //                     // 'route_handler' => [Controllers\HomeController::class, 'browse']
     //                     // OR:
     //                     // 'route_handler' => function() { return '<p>I\'m a closure!</p>'; }
     //                     // OR:
-    //                     // 'route_handler' => 'Tisa\Framework\Controllers\InvokeClass'
+    //                     // 'route_handler' => 'Controllers\InvokeClass'
     //                     'parameters' => ['route_id' => 1]
     //                 ]
     //             ],
@@ -97,7 +97,7 @@ $prepares = [
     //                 'method' => 'GET',
     //                 'pattern' => '/home/{section}[/]',
     //                 'action' => [
-    //                     'handler' => 'Tisa\Framework\Controllers\HomeController::browse',
+    //                     'handler' => 'Controllers\HomeController::browse',
     //                     'parameters' => ['route_id' => 2]
     //                 ]
     //             ],
