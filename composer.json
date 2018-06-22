@@ -13,7 +13,7 @@
   ],
   "require": {
     "http-interop/http-factory": "^0.3",
-    "mindplay/middleman": "^2.0",
+    "mindplay/middleman": "^3.0",
     "monolog/monolog": "^1.20",
     "nikic/fast-route": "^1.0",
     "rdlowrey/auryn": "^1.4",
