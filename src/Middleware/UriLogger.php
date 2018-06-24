@@ -6,12 +6,14 @@
 
 namespace Phanoteus\Phokis\Middleware;
 
-use Interop\Http\Middleware\ServerMiddlewareInterface;
-use Interop\Http\Middleware\DelegateInterface;
+use Psr\Http\Server\MiddlewareInterface;
+// use Interop\Http\Middleware\DelegateInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
-class UriLogger implements ServerMiddlewareInterface
+class UriLogger implements MiddlewareInterface
 {
     private $logger;
 
@@ -26,13 +28,13 @@ class UriLogger implements ServerMiddlewareInterface
     }
 
     /**
-     * Processes a server request and returns a PSR-7 Response, optionally invoking a delegate.
+     * Processes a server request and returns a PSR-7 Response, optionally invoking a RequestHandler.
      *
      * @param ServerRequestInterface $request
-     * @param DelegateInterface      $delegate
+     * @param RequestHandlerInterface      $requestHandler
      * @return ResponseInterface
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $requestHandler): ResponseInterface
     {
         $uri = $request->getUri()->__toString();
 
@@ -50,6 +52,6 @@ class UriLogger implements ServerMiddlewareInterface
         $info = "Client at address '{$address}'{$proxy} requested the following URI: {$uri}.";
         $this->logger->addInfo($info, []);
 
-        return $delegate->process($request);
+        return $requestHandler->handle($request);
     }
 }

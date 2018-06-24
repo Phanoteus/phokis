@@ -10,8 +10,9 @@
 
 namespace Phanoteus\Phokis\Middleware;
 
-use Interop\Http\Middleware\ServerMiddlewareInterface;
-use Interop\Http\Middleware\DelegateInterface;
+use Psr\Http\Server\MiddlewareInterface;
+// use Interop\Http\Middleware\DelegateInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Phanoteus\Phokis\Factories\Http\Diactoros\Factory;
@@ -19,7 +20,7 @@ use Psr\Log\LoggerInterface;
 use Auryn\Injector;
 use ReflectionMethod;
 
-class RequestHandler implements ServerMiddlewareInterface
+class ResponseGenerator implements MiddlewareInterface
 {
 
     private $injector;
@@ -29,7 +30,7 @@ class RequestHandler implements ServerMiddlewareInterface
     private $parametersAttribute = 'request-parameters';
 
     /**
-     * RequestHandler constructor.
+     * ResponseGenerator constructor.
      *
      * This object has an Auryn injector as a dependency. Doing this is more or less like using the maligned
      * "service locator" pattern. But this, to me, seems better than using a so-called "resolver" to instantiate
@@ -76,70 +77,59 @@ class RequestHandler implements ServerMiddlewareInterface
     /**
      * Processes a server request and returns a PSR-7 Response.
      *
-     * This function, in compliance with the ServerMiddlewareInterface, accepts a delegate
-     * but doesn't call it.
      *
-     * @param ServerRequestInterface $request
-     * @param DelegateInterface      $delegate
+     * @param ServerRequestInterface  $request
+     * @param RequestHandlerInterface  $requestHandler
      * @return ResponseInterface
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $requestHandler): ResponseInterface
     {
         $parameters = $request->getAttribute($this->parametersAttribute);
         $handler = $request->getAttribute($this->handlerAttribute);
 
-        return $this->executeHandler($handler, $parameters);
-    }
-
-
-    private function executeHandler($handler, array $parameters = [])
-    {
         $handler = $this->verifyHandler($handler);
         if ($handler === false) {
             throw new \RuntimeException("The specified handler is not a valid callable or closure.");
         }
 
-        ob_start();
-        $level = ob_get_level();
+        $response = call_user_func($handler, $parameters);
 
-        try {
-
-            // Using call_user_func in order to retain associative array for parameters.
-            // The call_user_func_array function passes an indexed array.
-            $return = call_user_func($handler, $parameters);
-
-            if ($return instanceof ResponseInterface) {
-                $response = $return;
-                $return = '';
-            }
-            elseif (is_null($return) || is_scalar($return) || (is_object($return) && method_exists($return, '__toString'))) {
-                $response = $this->factory->createResponse();
-            }
-            else {
-                throw new \UnexpectedValueException(
-                    'The value returned must be scalar (e.g., a string) or an object with an implementation of the __toString method.'
-                );
-            }
-
-            while (ob_get_level() >= $level) {
-                $return = ob_get_clean() . $return;
-            }
-
-            // Get body as a stream.
-            $body = $response->getBody();
-
-            if ($return !== '' && $body->isWritable()) {
-                $body->write($return);
-            }
-
+        if ($response instanceof ResponseInterface) {
             return $response;
-        } catch (\Exception $exception) {
-            while (ob_get_level() >= $level) {
-                ob_end_clean();
-            }
-
-            throw $exception;
         }
+
+        if (is_null($response) || is_scalar($response) || (is_object($response) && method_exists($response, '__toString'))) {
+            $createdResponse = $this->factory->createResponse();
+
+            try {
+                ob_start();
+                $level = ob_get_level();
+
+                while (ob_get_level() >= $level) {
+                    $response = ob_get_clean() . $response;
+                }
+                
+                $body = $createdResponse->getBody();
+
+                if (!empty($response) && $body->isWritable()) {
+                    $body->write($response);
+                }
+                
+                return $createdResponse;
+            }
+            catch (\Exception $exception) {
+                while (ob_get_level() >= $level) {
+                    ob_end_clean();
+                }
+    
+                throw $exception;                
+            }
+        }
+
+        // If the $response isn't an HTML Response or null or a scalar value or an object that can be converted
+        // into a string, pass operation to the supplied request handler.
+
+        return $requestHandler->handle($request);
     }
 
     /**

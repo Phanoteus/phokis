@@ -30,7 +30,7 @@ class Factory implements ServerRequestFactoryInterface, ResponseFactoryInterface
      * @param  ResponseInterface $response
      * @return ResponseInterface
      */
-    public function fixContentLength(ResponseInterface $response)
+    public function fixContentLength(ResponseInterface $response): ResponseInterface
     {
         if (!$response->hasHeader('Content-Length')) {
             return $response;

@@ -117,7 +117,7 @@ $prepares = [
 $shares = [
     // Examples:
     // 'Monolog\Logger',
-    // 'Phokis\Factories\Diactoros\Factory'
+    // 'Phokis\Factories\Http\Diactoros\Factory'
 ];
 
 $configuration = new InjectorConfig($aliases, $definitions, $delegates, $prepares, $shares);

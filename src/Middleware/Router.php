@@ -9,15 +9,16 @@
 
 namespace Phanoteus\Phokis\Middleware;
 
-use Interop\Http\Middleware\ServerMiddlewareInterface;
-use Interop\Http\Middleware\DelegateInterface;
+use Psr\Http\Server\MiddlewareInterface;
+// use Interop\Http\Middleware\DelegateInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use FastRoute\Dispatcher;
 use Phanoteus\Phokis\Routing\RouteResolver;
 use Phanoteus\Phokis\Factories\Http\Diactoros\Factory;
 
-class Router implements ServerMiddlewareInterface
+class Router implements MiddlewareInterface
 {
     private $resolver;
     private $factory;
@@ -46,13 +47,13 @@ class Router implements ServerMiddlewareInterface
     }
 
     /**
-     * Processes a server request and returns a PSR-7 Response, optionally invoking a delegate.
+     * Processes a server request and returns a PSR-7 Response, optionally invoking a RequestHandler.
      *
      * @param ServerRequestInterface $request
-     * @param DelegateInterface      $delegate
+     * @param RequestHandlerInterface $requestHandler
      * @return ResponseInterface
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $requestHandler): ResponseInterface
     {
         // The array returned from the FastRoute dispatch() method can be one of the following:
         // [0]  =   The routing path (pattern) is not found.
@@ -76,13 +77,13 @@ class Router implements ServerMiddlewareInterface
         // and return an error page.
 
         if ($routeStatus === Dispatcher::NOT_FOUND) {
-            $body = sprintf('The requested URI (%1$s) and the specified HTTP method (%2$s) are not mapped to a suitable application handler. No response can be generated.', $path, $method);
+            $body = sprintf('404 Error: The requested URI (%1$s) and the specified HTTP method (%2$s) are not mapped to a suitable application handler. No response can be generated.', $path, $method);
             return $this->factory->createResponse(404, $body);
         }
 
         if ($routeStatus === Dispatcher::METHOD_NOT_ALLOWED) {
             $allowed = implode(', ', $routingArray[1]);
-            $body = sprintf('The %s method is not allowed. These are the allowed methods: %s.', $method, $allowed);
+            $body = sprintf('405 Error: The %s method is not allowed. These are the allowed methods: %s.', $method, $allowed);
             return $this->factory->createResponse(405, $body)->withHeader('Allow', $allowed);
         }
 
@@ -108,7 +109,7 @@ class Router implements ServerMiddlewareInterface
         }
 
         if (!isset($handler)) {
-            $body = sprintf('The requested URI (%1$s) and the specified HTTP method (%2$s) are not mapped to a suitable application handler. No response can be generated.', $path, $method);
+            $body = sprintf('404 Error: The requested URI (%1$s) and the specified HTTP method (%2$s) are not mapped to a suitable application handler. No response can be generated.', $path, $method);
             return $this->factory->createResponse(404, $body);
         }
 
@@ -123,7 +124,7 @@ class Router implements ServerMiddlewareInterface
 
         $request = $this->setParameters($request, $parameters);
 
-        return $delegate->process($request);
+        return $requestHandler->handle($request);
     }
 
     /**
