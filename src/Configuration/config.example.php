@@ -2,7 +2,7 @@
 /**
  * A sample configuration file for initializing the Auryn injector using the InjectorConfig object.
  *
- * The idea for configuring Auryn in this way was stolen from
+ * The approach to configuring Auryn in this way was stolen from
  * Dan Ackroyd's Tier system (https://github.com/Danack/TierJigSkeleton).
  */
 
@@ -44,19 +44,15 @@ use Phanoteus\Phokis\Configuration\InjectorConfig;
 $aliases = [
     // Examples:
     // 'Psr\Log\LoggerInterface' => 'Monolog\Logger',
-    // 'Psr\Http\Message\ServerRequestInterface' => 'Zend\Diactoros\ServerRequest'
+    // 'Psr\Http\Message\ServerRequestInterface' => 'Zend\Diactoros\ServerRequest',
+    // 'Psr\Http\Message\ResponseInterface' => 'Zend\Diactoros\Response',
+    // 'Phanoteus\Phokis\Factories\Http\PhokisResponseFactoryInterface' => 'Phanoteus\Phokis\Factories\Http\Diactoros\ResponseFactory',
+    // 'Phanoteus\Phokis\Routing\RouteActionInterface' => 'Phanoteus\Phokis\Routing\RouteAction'
 ];
 
 $definitions = [
-    // Examples:
-    // 'Phanoteus\Phokis\Middleware\Router' =>
-    //     [
-    //         ':defaultAction' =>
-    //             [
-    //                 'handler' => 'Controllers\HomeController::browse',
-    //                 'parameters' => []
-    //             ]
-    //     ]
+    // Example:
+    // 'Phanoteus\Phokis\Routing\RouteAction' => [':action' => ['Controllers\HomeController', 'browse']]
 ];
 
 $delegates = [
@@ -83,22 +79,22 @@ $prepares = [
     //                 'method' => 'GET',
     //                 'pattern' => '/home[/]',
     //                 'action' => [
-    //                     'handler' => 'Controllers\HomeController::browse',
+    //                     'Controllers\HomeController::browse',
     //                     // OR:
-    //                     // 'route_handler' => [Controllers\HomeController::class, 'browse']
+    //                     // [Controllers\HomeController::class, 'browse'],
     //                     // OR:
-    //                     // 'route_handler' => function() { return '<p>I\'m a closure!</p>'; }
+    //                     // function() { return '<p>I\'m a closure!</p>'; },
     //                     // OR:
-    //                     // 'route_handler' => 'Controllers\InvokeClass'
-    //                     'parameters' => ['route_id' => 1]
+    //                     // 'Controllers\InvokeClass',
+    //                     ['route_id' => 1]
     //                 ]
     //             ],
     //             [
     //                 'method' => 'GET',
     //                 'pattern' => '/home/{section}[/]',
     //                 'action' => [
-    //                     'handler' => 'Controllers\HomeController::browse',
-    //                     'parameters' => ['route_id' => 2]
+    //                     'Controllers\HomeController::browse',
+    //                     ['route_id' => 2]
     //                 ]
     //             ],
     //             // etc.
@@ -117,7 +113,7 @@ $prepares = [
 $shares = [
     // Examples:
     // 'Monolog\Logger',
-    // 'Phokis\Factories\Http\Diactoros\Factory'
+    // 'Phanoteus\Phokis\Factories\Http\Diactoros\ResponseFactory',
 ];
 
 $configuration = new InjectorConfig($aliases, $definitions, $delegates, $prepares, $shares);

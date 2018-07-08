@@ -40,9 +40,10 @@ class RouteResolver
     /**
      * Initializes the RouteResolver with routes.
      *
-     * @param  callable     $routeDefinitionCallback
-     * @param  string       $cacheFile
-     * @param  bool|boolean $cacheDisabled
+     * @param callable $routeDefinitionCallback
+     * @param string $cacheFile
+     * @param bool|boolean $cacheDisabled
+     * 
      * @return void
      */
     public function initialize(
@@ -68,11 +69,12 @@ class RouteResolver
     /**
      * Identifies whether a route resolution exists based on a URI path and a given HTTP method.
      *
-     * @param  string $path
-     * @param  string $method
+     * @param string $path
+     * @param string $method
+     * 
      * @return array A FastRoute routing array.
      */
-    public function resolveRouteFromPath(string $path, string $method = 'GET')
+    public function resolveRouteFromPath(string $path, string $method = 'GET'): array
     {
         if (!isset($this->dispatcher))
             throw new \Exception(sprintf('The RouteResolver object must be initialized (by calling its `initialize()` function) before it can resolve routes.', __FUNCTION__));
@@ -82,10 +84,11 @@ class RouteResolver
     /**
      * A convenience method to identify a route resolution by passing in a Request object.
      *
-     * @param  ServerRequestInterface $request [description]
+     * @param ServerRequestInterface $request
+     * 
      * @return array A FastRoute routing array.
      */
-    public function resolveRouteFromRequest(ServerRequestInterface $request)
+    public function resolveRouteFromRequest(ServerRequestInterface $request): array
     {
         return $this->resolveRouteFromPath($request->getUri()->getPath(), $request->getMethod());
     }

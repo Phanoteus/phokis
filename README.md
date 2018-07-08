@@ -54,12 +54,17 @@ $request = $injector->make('Psr\Http\Message\ServerRequestInterface');
 
 // You can use the $injector to make each middleware component and if a given component
 // needs a factory or a logger, etc., in its constructor then the $injector will provision any dependencies.
-// 
+//
+// The ResponseGenerator middleware component should generally be the last (bottom) middleware component in the stack,
+// unless additional processing of the HTML Response object is required. (Additional middleware components could accept
+// the Request object build by the ResponseGenerator, but those components would have to create their own Response objects
+// to return.)
+//
 // So, build your middleware stack:
 $stack = [
     $injector->make('Phanoteus\Phokis\Middleware\UriLogger'),
     $injector->make('Phanoteus\Phokis\Middleware\Router'),
-    $injector->make('Phanoteus\Phokis\Middleware\RequestHandler') // Should be the last item in the stack.
+    $injector->make('Phanoteus\Phokis\Middleware\ResponseGenerator')
 ];
 
 // Make the middleman Dispatcher object with an on-the-fly $injector definition to

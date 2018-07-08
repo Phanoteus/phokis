@@ -7,7 +7,6 @@
 namespace Phanoteus\Phokis\Middleware;
 
 use Psr\Http\Server\MiddlewareInterface;
-// use Interop\Http\Middleware\DelegateInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -31,7 +30,8 @@ class UriLogger implements MiddlewareInterface
      * Processes a server request and returns a PSR-7 Response, optionally invoking a RequestHandler.
      *
      * @param ServerRequestInterface $request
-     * @param RequestHandlerInterface      $requestHandler
+     * @param RequestHandlerInterface $requestHandler
+     * 
      * @return ResponseInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $requestHandler): ResponseInterface
