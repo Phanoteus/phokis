@@ -55,10 +55,10 @@ $request = $injector->make('Psr\Http\Message\ServerRequestInterface');
 // You can use the $injector to make each middleware component and if a given component
 // needs a factory or a logger, etc., in its constructor then the $injector will provision any dependencies.
 //
-// The RouteExecutive middleware component should generally be the last (bottom) middleware component in the stack,
-// unless additional processing of the HTML Response object is required. (Additional middleware components could accept
-// the Request object built by the RouteExecutive, but those components would have to create their own Response objects
-// to return.)
+// The RouteExecutive middleware component should generally be the last (bottom) middleware component
+// in the stack, unless additional processing of the HTML Response object is required. (Additional
+// middleware components could accept the Request object built by the RouteExecutive, but those
+// components would have to create their own Response objects to return.)
 //
 // So, build your middleware stack:
 $stack = [
